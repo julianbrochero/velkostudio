@@ -6,8 +6,8 @@ import {
   cloneElement,
   ReactElement,
   useEffect,
-  useState,
   useId,
+  useState,
 } from 'react'
 
 export type AnimatedBackgroundProps = {
@@ -46,8 +46,14 @@ export function AnimatedBackground({
     }
   }, [defaultValue])
 
-  return Children.map(children, (child: any, index) => {
-    const id = child.props['data-id']
+  return Children.map(children, (child, index) => {
+    const element = child as ReactElement<
+      React.HTMLAttributes<HTMLElement> & {
+        'data-id': string
+        'data-checked'?: string
+      }
+    >
+    const id = element.props['data-id']
 
     const interactionProps = enableHover
       ? {
@@ -59,10 +65,10 @@ export function AnimatedBackground({
         }
 
     return cloneElement(
-      child,
+      element,
       {
         key: index,
-        className: cn('relative inline-flex', child.props.className),
+        className: cn('relative inline-flex', element.props.className),
         'data-checked': activeId === id ? 'true' : 'false',
         ...interactionProps,
       },
@@ -83,7 +89,7 @@ export function AnimatedBackground({
             />
           )}
         </AnimatePresence>
-        <div className="z-10">{child.props.children}</div>
+        <div className="z-10">{element.props.children}</div>
       </>,
     )
   })

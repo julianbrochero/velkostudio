@@ -1,7 +1,7 @@
 'use client'
 import { cn } from '@/lib/utils'
 import { AnimatePresence, motion, Transition, Variants } from 'motion/react'
-import { useMemo, useId } from 'react'
+import { createElement, useMemo, useId } from 'react'
 
 export type TextMorphProps = {
   children: string
@@ -54,8 +54,10 @@ export function TextMorph({
     mass: 0.3,
   }
 
-  return (
-    <Component className={cn(className)} aria-label={children} style={style}>
+  return createElement(
+    Component,
+    { className: cn(className), 'aria-label': children, style },
+    <>
       <AnimatePresence mode="popLayout" initial={false}>
         {characters.map((character) => (
           <motion.span
@@ -73,6 +75,6 @@ export function TextMorph({
           </motion.span>
         ))}
       </AnimatePresence>
-    </Component>
+    </>,
   )
 }

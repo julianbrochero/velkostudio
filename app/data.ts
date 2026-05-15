@@ -1,8 +1,8 @@
 type Project = {
   name: string
   description: string
-  link: string
-  video: string
+  link?: string
+  accent: string
   id: string
 }
 
@@ -29,75 +29,76 @@ type SocialLink = {
 
 export const PROJECTS: Project[] = [
   {
-    name: 'Motion Primitives Pro',
+    name: 'Gestify',
     description:
-      'Advanced components and templates to craft beautiful websites.',
-    link: 'https://pro.motion-primitives.com/',
-    video:
-      'https://res.cloudinary.com/read-cv/video/upload/t_v_b/v1/1/profileItems/W2azTw5BVbMXfj7F53G92hMVIn32/newProfileItem/d898be8a-7037-4c71-af0c-8997239b050d.mp4?_a=DATAdtAAZAA0',
+      'Plataforma ERP para pymes argentinas. Ventas, inventario, flujo de caja, presupuestos y reportes en un solo lugar, pensada para el mercado local.',
+    link: 'https://gestify.ar',
+    accent:
+      'from-emerald-500/20 via-sky-500/10 to-zinc-100 dark:from-emerald-400/15 dark:via-sky-400/10 dark:to-zinc-900',
     id: 'project1',
   },
   {
-    name: 'Motion Primitives',
-    description: 'UI kit to make beautiful, animated interfaces.',
-    link: 'https://motion-primitives.com/',
-    video:
-      'https://res.cloudinary.com/read-cv/video/upload/t_v_b/v1/1/profileItems/W2azTw5BVbMXfj7F53G92hMVIn32/XSfIvT7BUWbPRXhrbLed/ee6871c9-8400-49d2-8be9-e32675eabf7e.mp4?_a=DATAdtAAZAA0',
+    name: 'Líneas Rectas',
+    description:
+      'Configuración y diseño de e-commerce para una marca de indumentaria en Tiendanube, con puesta a punto de la tienda, identidad visual aplicada y optimización UX.',
+    accent:
+      'from-rose-500/20 via-amber-500/10 to-zinc-100 dark:from-rose-400/15 dark:via-amber-400/10 dark:to-zinc-900',
     id: 'project2',
+  },
+  {
+    name: 'Asistencias MAENS',
+    description:
+      'Sistema de asistencia tipo kiosco para un programa de entrenamiento de básquet. Check-in por DNI, panel de administración y reportes de sesiones para el equipo técnico.',
+    accent:
+      'from-orange-500/20 via-violet-500/10 to-zinc-100 dark:from-orange-400/15 dark:via-violet-400/10 dark:to-zinc-900',
+    id: 'project3',
   },
 ]
 
 export const WORK_EXPERIENCE: WorkExperience[] = [
   {
-    company: 'Reglazed Studio',
-    title: 'CEO',
+    company: 'VELkO®',
+    title: 'Fundador y desarrollador',
     start: '2024',
-    end: 'Present',
-    link: 'https://ibelick.com',
+    end: 'Actualidad',
+    link: 'https://velko.studio',
     id: 'work1',
   },
   {
-    company: 'Freelance',
-    title: 'Design Engineer',
+    company: 'Independiente',
+    title: 'Desarrollador freelance',
     start: '2022',
-    end: '2024',
-    link: 'https://ibelick.com',
+    end: 'Actualidad',
+    link: 'mailto:brocherojulian72@gmail.com',
     id: 'work2',
-  },
-  {
-    company: 'Freelance',
-    title: 'Front-end Developer',
-    start: '2017',
-    end: 'Present',
-    link: 'https://ibelick.com',
-    id: 'work3',
   },
 ]
 
 export const BLOG_POSTS: BlogPost[] = [
   {
-    title: 'Exploring the Intersection of Design, AI, and Design Engineering',
-    description: 'How AI is changing the way we design',
+    title: 'Explorando el cruce entre diseño, IA e ingeniería de diseño',
+    description: 'Cómo la IA está cambiando la forma en que diseñamos',
     link: '/blog/exploring-the-intersection-of-design-ai-and-design-engineering',
     uid: 'blog-1',
   },
   {
-    title: 'Why I left my job to start my own company',
+    title: 'Por qué dejé mi trabajo para crear mi propia empresa',
     description:
-      'A deep dive into my decision to leave my job and start my own company',
+      'Una mirada en profundidad a la decisión de dejar mi trabajo y empezar mi propia empresa',
     link: '/blog/exploring-the-intersection-of-design-ai-and-design-engineering',
     uid: 'blog-2',
   },
   {
-    title: 'What I learned from my first year of freelancing',
+    title: 'Lo que aprendí en mi primer año como freelancer',
     description:
-      'A look back at my first year of freelancing and what I learned',
+      'Un repaso de mi primer año trabajando freelance y lo que aprendí',
     link: '/blog/exploring-the-intersection-of-design-ai-and-design-engineering',
     uid: 'blog-3',
   },
   {
-    title: 'How to Export Metadata from MDX for Next.js SEO',
-    description: 'A guide on exporting metadata from MDX files to leverage Next.js SEO features.',
+    title: 'Cómo exportar metadata desde MDX para SEO en Next.js',
+    description:
+      'Una guía para exportar metadata desde archivos MDX y aprovechar las funciones SEO de Next.js.',
     link: '/blog/example-mdx-metadata',
     uid: 'blog-4',
   },
@@ -105,21 +106,13 @@ export const BLOG_POSTS: BlogPost[] = [
 
 export const SOCIAL_LINKS: SocialLink[] = [
   {
-    label: 'Github',
-    link: 'https://github.com/ibelick',
-  },
-  {
-    label: 'Twitter',
-    link: 'https://twitter.com/ibelick',
-  },
-  {
-    label: 'LinkedIn',
-    link: 'https://www.linkedin.com/in/ibelick',
+    label: 'WhatsApp',
+    link: 'https://wa.me/5493534087718',
   },
   {
     label: 'Instagram',
-    link: 'https://www.instagram.com/ibelick',
+    link: 'https://instagram.com/velko.studio',
   },
 ]
 
-export const EMAIL = 'your@email.com'
+export const EMAIL = 'brocherojulian72@gmail.com'

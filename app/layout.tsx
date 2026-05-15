@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Geist_Mono, Inter, Inter_Tight } from 'next/font/google'
 import './globals.css'
 import { Header } from './header'
 import { Footer } from './footer'
@@ -12,20 +12,37 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://nim-fawn.vercel.app/'),
+  metadataBase: new URL('https://velko.studio/'),
   alternates: {
-    canonical: '/'
+    canonical: '/',
   },
   title: {
-    default: 'Nim - Personal website template',
-    template: '%s | Nim'
+    default: 'VELkO® — Experiencias web, automatizaciones y software',
+    template: '%s | VELkO®',
   },
-  description:  'Nim is a free and open-source personal website template built with Next.js 15, React 19 and Motion-Primitives.',
-};
+  description:
+    'Creamos productos digitales que resuelven problemas reales. Plataformas SaaS, automatizaciones a medida y soluciones de e-commerce desde Argentina.',
+  openGraph: {
+    title: 'VELkO®',
+    description: 'Experiencias web · Automatizaciones · Software',
+    url: 'https://velko.studio',
+    siteName: 'VELkO®',
+  },
+  twitter: {
+    card: 'summary_large_image',
+  },
+}
 
-const geist = Geist({
-  variable: '--font-geist',
+const inter = Inter({
+  variable: '--font-inter',
   subsets: ['latin'],
+  weight: ['400', '500', '700', '800', '900'],
+})
+
+const interTight = Inter_Tight({
+  variable: '--font-display',
+  subsets: ['latin'],
+  weight: ['900'],
 })
 
 const geistMono = Geist_Mono({
@@ -39,9 +56,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="es" suppressHydrationWarning>
       <body
-        className={`${geist.variable} ${geistMono.variable} bg-white tracking-tight antialiased dark:bg-zinc-950`}
+        className={`${inter.variable} ${interTight.variable} ${geistMono.variable} bg-white tracking-tight antialiased dark:bg-zinc-950`}
       >
         <ThemeProvider
           enableSystem={true}
@@ -49,7 +66,7 @@ export default function RootLayout({
           storageKey="theme"
           defaultTheme="system"
         >
-          <div className="flex min-h-screen w-full flex-col font-[family-name:var(--font-inter-tight)]">
+          <div className="flex min-h-screen w-full flex-col font-[family-name:var(--font-inter)]">
             <div className="relative mx-auto w-full max-w-screen-sm flex-1 px-4 pt-20">
               <Header />
               {children}
