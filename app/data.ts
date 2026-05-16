@@ -2,6 +2,7 @@ type Project = {
   name: string
   description: string
   link?: string
+  image?: string
   accent: string
   id: string
 }
@@ -31,7 +32,8 @@ export const PROJECTS: Project[] = [
   {
     name: 'Gestify',
     description:
-      'Plataforma ERP para pymes argentinas. Ventas, inventario, flujo de caja, presupuestos y reportes en un solo lugar, pensada para el mercado local.',
+      'SaaS de gestión para pymes argentinas: ventas, inventario, caja, presupuestos y reportes en una plataforma web pensada para el mercado local.',
+    image: '/gestify.png',
     link: 'https://gestify.ar',
     accent:
       'from-emerald-500/20 via-sky-500/10 to-zinc-100 dark:from-emerald-400/15 dark:via-sky-400/10 dark:to-zinc-900',
@@ -40,15 +42,17 @@ export const PROJECTS: Project[] = [
   {
     name: 'Líneas Rectas',
     description:
-      'Configuración y diseño de e-commerce para una marca de indumentaria en Tiendanube, con puesta a punto de la tienda, identidad visual aplicada y optimización UX.',
+      'Configuración de página de ventas y e-commerce para una fábrica de muebles de melamina, con catálogo claro, trabajos a medida y canales de contacto directos.',
+    image: '/lineasrectas.png',
+    link: 'https://lineasrectas.com.ar',
     accent:
       'from-rose-500/20 via-amber-500/10 to-zinc-100 dark:from-rose-400/15 dark:via-amber-400/10 dark:to-zinc-900',
     id: 'project2',
   },
   {
-    name: 'Asistencias MAENS',
+    name: 'Asist App',
     description:
-      'Sistema de asistencia tipo kiosco para un programa de entrenamiento de básquet. Check-in por DNI, panel de administración y reportes de sesiones para el equipo técnico.',
+      'Aplicación profesional de asistencia para un preparador físico, con check-in por DNI, panel de administración y reportes de sesiones para seguir el rendimiento.',
     accent:
       'from-orange-500/20 via-violet-500/10 to-zinc-100 dark:from-orange-400/15 dark:via-violet-400/10 dark:to-zinc-900',
     id: 'project3',

@@ -1,7 +1,7 @@
 'use client'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
-import { BriefcaseBusiness, FolderOpen, Home, Mail } from 'lucide-react'
+import { BriefcaseBusiness, FolderOpen, Home, Mail, Wrench } from 'lucide-react'
 import { MenuBar } from '@/components/ui/glow-menu'
 
 export function Header() {
@@ -17,6 +17,14 @@ export function Header() {
       gradient:
         'radial-gradient(circle, rgba(56,189,248,0.28), transparent 70%)',
       iconColor: 'text-sky-300',
+    },
+    {
+      label: 'Servicios',
+      href: '/#servicios',
+      icon: Wrench,
+      gradient:
+        'radial-gradient(circle, rgba(250,204,21,0.22), transparent 70%)',
+      iconColor: 'text-yellow-300',
     },
     {
       label: 'Proyectos',

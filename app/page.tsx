@@ -1,6 +1,8 @@
 'use client'
+import Image from 'next/image'
 import { useState } from 'react'
 import { motion } from 'motion/react'
+import { Bot, Code2, Settings2, ShoppingCart } from 'lucide-react'
 import IntroScreen from '@/components/IntroScreen'
 import HeroSection from '@/components/HeroSection'
 import { Spotlight } from '@/components/ui/spotlight'
@@ -18,82 +20,93 @@ const VARIANTS_CONTAINER = {
 }
 
 const VARIANTS_SECTION = {
-  hidden: { opacity: 0, y: 20, filter: 'blur(8px)' },
-  visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
-}
-
-const VARIANTS_PROJECTS_SECTION = {
-  hidden: { opacity: 0, x: -56, filter: 'blur(10px)' },
+  hidden: { opacity: 0, x: -64, filter: 'blur(12px)' },
   visible: {
     opacity: 1,
     x: 0,
     filter: 'blur(0px)',
     transition: {
-      duration: 0.6,
+      duration: 0.85,
       ease: [0.22, 1, 0.36, 1],
-      staggerChildren: 0.12,
+      staggerChildren: 0.16,
     },
   },
 }
 
-const VARIANTS_PROJECT_CARD = {
+const VARIANTS_SECTION_ITEM = {
   hidden: (index: number) => ({
     opacity: 0,
-    x: index % 2 === 0 ? -36 : 36,
-    filter: 'blur(8px)',
+    x: index % 2 === 0 ? -46 : 46,
+    filter: 'blur(10px)',
   }),
   visible: {
     opacity: 1,
     x: 0,
     filter: 'blur(0px)',
     transition: {
-      duration: 0.5,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  },
-}
-
-const VARIANTS_EXPERIENCE_SECTION = {
-  hidden: { opacity: 0, y: 36, filter: 'blur(10px)' },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
-    transition: {
-      duration: 0.55,
-      ease: [0.22, 1, 0.36, 1],
-      staggerChildren: 0.1,
-    },
-  },
-}
-
-const VARIANTS_EXPERIENCE_ITEM = {
-  hidden: (index: number) => ({
-    opacity: 0,
-    x: index % 2 === 0 ? 28 : -28,
-    filter: 'blur(8px)',
-  }),
-  visible: {
-    opacity: 1,
-    x: 0,
-    filter: 'blur(0px)',
-    transition: {
-      duration: 0.45,
+      duration: 0.75,
       ease: [0.22, 1, 0.36, 1],
     },
   },
 }
 
 const TRANSITION_SECTION = {
-  duration: 0.3,
+  duration: 0.85,
+  ease: [0.22, 1, 0.36, 1],
 }
+
+const SERVICES = [
+  {
+    title: 'SaaS y plataformas web',
+    description:
+      'Productos digitales escalables para pymes y emprendedores: plataformas, paneles privados y herramientas web listas para operar.',
+    icon: Code2,
+  },
+  {
+    title: 'Automatizaciones y bots',
+    description:
+      'Flujos automáticos, integraciones y bots para reducir tareas repetitivas en ventas, soporte y operación.',
+    icon: Bot,
+  },
+  {
+    title: 'E-commerce',
+    description:
+      'Configuración, diseño y optimización de tiendas online, páginas de venta y catálogos para convertir mejor.',
+    icon: ShoppingCart,
+  },
+  {
+    title: 'Sistemas internos',
+    description:
+      'Herramientas a medida para gestionar datos, equipos, procesos y reportes sin depender de planillas frágiles.',
+    icon: Settings2,
+  },
+]
 
 type ProjectPreviewProps = {
   name: string
   accent: string
+  image?: string
 }
 
-function ProjectPreview({ name, accent }: ProjectPreviewProps) {
+function ProjectPreview({ name, accent, image }: ProjectPreviewProps) {
+  if (image) {
+    return (
+      <div
+        className="relative aspect-video w-full overflow-hidden rounded-xl bg-zinc-950"
+        aria-label={`Vista previa del proyecto ${name}`}
+      >
+        <Image
+          alt={`Captura de la página ${name}`}
+          className="h-full w-full object-cover"
+          fill
+          sizes="(min-width: 640px) 50vw, 100vw"
+          src={image}
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-white/10" />
+      </div>
+    )
+  }
+
   return (
     <div
       className={`relative aspect-video w-full overflow-hidden rounded-xl bg-gradient-to-br ${accent}`}
@@ -166,6 +179,9 @@ export default function Personal() {
         <motion.section
           variants={VARIANTS_SECTION}
           transition={TRANSITION_SECTION}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, amount: 0.45 }}
         >
           <div className="flex-1">
             <p className="text-zinc-600 dark:text-zinc-400">
@@ -178,11 +194,58 @@ export default function Personal() {
         </motion.section>
 
         <motion.section
-          id="proyectos"
-          variants={VARIANTS_PROJECTS_SECTION}
+          id="servicios"
+          variants={VARIANTS_SECTION}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.25 }}
+          viewport={{ once: false, amount: 0.45 }}
+        >
+          <div className="mb-5 flex items-end justify-between gap-6">
+            <div>
+              <p className="mb-2 text-xs font-medium tracking-[0.24em] text-zinc-500 uppercase dark:text-zinc-500">
+                Qué hacemos
+              </p>
+              <h3 className="text-lg font-medium">Servicios</h3>
+            </div>
+            <p className="hidden max-w-xs text-right text-sm text-zinc-500 md:block dark:text-zinc-500">
+              Soluciones concretas para vender, operar y automatizar mejor.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {SERVICES.map((service, index) => {
+              const Icon = service.icon
+
+              return (
+                <motion.div
+                  key={service.title}
+                  custom={index}
+                  variants={VARIANTS_SECTION_ITEM}
+                  className="group relative overflow-hidden rounded-2xl bg-zinc-100/70 p-[1px] transition-colors duration-200 hover:bg-zinc-300/80 dark:bg-zinc-800/60 dark:hover:bg-zinc-700/80"
+                >
+                  <div className="relative h-full rounded-[15px] bg-white/85 p-5 dark:bg-zinc-950/90">
+                    <div className="mb-8 flex h-9 w-9 items-center justify-center rounded-full bg-zinc-950 text-zinc-50 dark:bg-zinc-100 dark:text-zinc-950">
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <h4 className="text-base font-medium text-zinc-950 dark:text-zinc-50">
+                      {service.title}
+                    </h4>
+                    <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+                      {service.description}
+                    </p>
+                  </div>
+                </motion.div>
+              )
+            })}
+          </div>
+        </motion.section>
+
+        <motion.section
+          id="proyectos"
+          variants={VARIANTS_SECTION}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, amount: 0.45 }}
         >
           <h3 className="mb-5 text-lg font-medium">Proyectos seleccionados</h3>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -190,11 +253,15 @@ export default function Personal() {
               <motion.div
                 key={project.name}
                 custom={index}
-                variants={VARIANTS_PROJECT_CARD}
+                variants={VARIANTS_SECTION_ITEM}
                 className="space-y-2"
               >
                 <div className="relative rounded-2xl bg-zinc-50/40 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50">
-                  <ProjectPreview name={project.name} accent={project.accent} />
+                  <ProjectPreview
+                    name={project.name}
+                    accent={project.accent}
+                    image={project.image}
+                  />
                 </div>
                 <div className="px-1">
                   {project.link ? (
@@ -223,10 +290,10 @@ export default function Personal() {
 
         <motion.section
           id="experiencia"
-          variants={VARIANTS_EXPERIENCE_SECTION}
+          variants={VARIANTS_SECTION}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.25 }}
+          viewport={{ once: false, amount: 0.45 }}
         >
           <h3 className="mb-5 text-lg font-medium">Experiencia</h3>
           <div className="flex flex-col space-y-2">
@@ -238,7 +305,7 @@ export default function Personal() {
                 key={job.id}
                 rel="noopener noreferrer"
                 target="_blank"
-                variants={VARIANTS_EXPERIENCE_ITEM}
+                variants={VARIANTS_SECTION_ITEM}
               >
                 <Spotlight
                   className="from-zinc-900 via-zinc-800 to-zinc-700 blur-2xl dark:from-zinc-100 dark:via-zinc-200 dark:to-zinc-50"
@@ -267,7 +334,9 @@ export default function Personal() {
         <motion.section
           id="contacto"
           variants={VARIANTS_SECTION}
-          transition={TRANSITION_SECTION}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, amount: 0.45 }}
         >
           <h3 className="mb-5 text-lg font-medium">Contacto</h3>
           <p className="mb-5 text-zinc-600 dark:text-zinc-400">

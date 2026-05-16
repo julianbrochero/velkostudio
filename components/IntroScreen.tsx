@@ -69,7 +69,7 @@ export default function IntroScreen({ onComplete }: IntroScreenProps) {
                 letter === '®'
                   ? 'clamp(18px, 2.8vw, 34px)'
                   : 'clamp(58px, 10vw, 112px)',
-              fontWeight: 900,
+              fontWeight: 700,
               letterSpacing: '-0.06em',
               lineHeight: 1,
               marginLeft: letter === '®' ? '0.08em' : 0,
