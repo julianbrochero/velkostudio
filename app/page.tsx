@@ -53,6 +53,37 @@ const VARIANTS_PROJECT_CARD = {
   },
 }
 
+const VARIANTS_EXPERIENCE_SECTION = {
+  hidden: { opacity: 0, y: 36, filter: 'blur(10px)' },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: {
+      duration: 0.55,
+      ease: [0.22, 1, 0.36, 1],
+      staggerChildren: 0.1,
+    },
+  },
+}
+
+const VARIANTS_EXPERIENCE_ITEM = {
+  hidden: (index: number) => ({
+    opacity: 0,
+    x: index % 2 === 0 ? 28 : -28,
+    filter: 'blur(8px)',
+  }),
+  visible: {
+    opacity: 1,
+    x: 0,
+    filter: 'blur(0px)',
+    transition: {
+      duration: 0.45,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+}
+
 const TRANSITION_SECTION = {
   duration: 0.3,
 }
@@ -192,18 +223,22 @@ export default function Personal() {
 
         <motion.section
           id="experiencia"
-          variants={VARIANTS_SECTION}
-          transition={TRANSITION_SECTION}
+          variants={VARIANTS_EXPERIENCE_SECTION}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.25 }}
         >
           <h3 className="mb-5 text-lg font-medium">Experiencia</h3>
           <div className="flex flex-col space-y-2">
-            {WORK_EXPERIENCE.map((job) => (
-              <a
+            {WORK_EXPERIENCE.map((job, index) => (
+              <motion.a
                 className="relative overflow-hidden rounded-2xl bg-zinc-300/30 p-[1px] dark:bg-zinc-600/30"
+                custom={index}
                 href={job.link}
-                target="_blank"
-                rel="noopener noreferrer"
                 key={job.id}
+                rel="noopener noreferrer"
+                target="_blank"
+                variants={VARIANTS_EXPERIENCE_ITEM}
               >
                 <Spotlight
                   className="from-zinc-900 via-zinc-800 to-zinc-700 blur-2xl dark:from-zinc-100 dark:via-zinc-200 dark:to-zinc-50"
@@ -224,7 +259,7 @@ export default function Personal() {
                     </p>
                   </div>
                 </div>
-              </a>
+              </motion.a>
             ))}
           </div>
         </motion.section>

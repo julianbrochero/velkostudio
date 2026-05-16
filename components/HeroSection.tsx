@@ -39,18 +39,18 @@ export default function HeroSection() {
             <div className="space-y-0">
               <div className="flex items-start">
                 <h1
-                  className="leading-[0.82] font-black tracking-[-0.06em] text-white drop-shadow-2xl"
+                  className="leading-[0.82] font-extrabold tracking-[-0.06em] text-white drop-shadow-2xl"
                   style={{ fontSize: 'clamp(78px, 23vw, 260px)' }}
                 >
                   VELkO
                 </h1>
-                <sup className="mt-3 ml-2 text-[clamp(32px,7vw,92px)] leading-none font-black text-white">
+                <sup className="mt-3 ml-2 text-[clamp(32px,7vw,92px)] leading-none font-extrabold text-white">
                   ®
                 </sup>
               </div>
 
               <p
-                className="text-right leading-none font-black tracking-[-0.04em] text-white md:pr-[18%]"
+                className="text-right leading-none font-extrabold tracking-[-0.04em] text-white md:pr-[18%]"
                 style={{ fontSize: 'clamp(40px, 7vw, 92px)' }}
               >
                 Studio
