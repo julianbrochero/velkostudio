@@ -60,11 +60,15 @@ function ThemeSwitch() {
 export function Footer() {
   return (
     <footer className="mt-24 border-t border-zinc-100 px-0 py-4 dark:border-zinc-800">
-      <div className="flex items-center justify-between">
-        <a href="https://velko.studio" target="_blank">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <a
+          href="https://github.com/julianbrochero"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <TextLoop className="text-xs text-zinc-500">
-            <span>© 2025 VELkO®.</span>
-            <span>Experiencias web · Automatizaciones · Software</span>
+            <span>© 2026 Julián Brochero.</span>
+            <span>Full Stack Developer · Software Engineer</span>
           </TextLoop>
         </a>
         <div className="text-xs text-zinc-400">

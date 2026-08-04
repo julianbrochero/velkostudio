@@ -1,362 +1,405 @@
-'use client'
 import Image from 'next/image'
-import { useState } from 'react'
-import { motion } from 'motion/react'
-import { Bot, Code2, Settings2, ShoppingCart } from 'lucide-react'
-import IntroScreen from '@/components/IntroScreen'
-import HeroSection from '@/components/HeroSection'
-import { Spotlight } from '@/components/ui/spotlight'
-import { Magnetic } from '@/components/ui/magnetic'
-import { PROJECTS, WORK_EXPERIENCE, EMAIL, SOCIAL_LINKS } from './data'
+import type { CSSProperties, ReactNode } from 'react'
 
-const VARIANTS_CONTAINER = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-    },
-  },
-}
-
-const VARIANTS_SECTION = {
-  hidden: { opacity: 0, x: -64, filter: 'blur(12px)' },
-  visible: {
-    opacity: 1,
-    x: 0,
-    filter: 'blur(0px)',
-    transition: {
-      duration: 0.85,
-      ease: [0.22, 1, 0.36, 1],
-      staggerChildren: 0.16,
-    },
-  },
-}
-
-const VARIANTS_SECTION_ITEM = {
-  hidden: (index: number) => ({
-    opacity: 0,
-    x: index % 2 === 0 ? -46 : 46,
-    filter: 'blur(10px)',
-  }),
-  visible: {
-    opacity: 1,
-    x: 0,
-    filter: 'blur(0px)',
-    transition: {
-      duration: 0.75,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  },
-}
-
-const TRANSITION_SECTION = {
-  duration: 0.85,
-  ease: [0.22, 1, 0.36, 1],
-}
-
-const SERVICES = [
+const skillGroups = [
   {
-    title: 'SaaS y plataformas web',
-    description:
-      'Productos digitales escalables para pymes y emprendedores: plataformas, paneles privados y herramientas web listas para operar.',
-    icon: Code2,
+    group: 'Frontend',
+    icon: (
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      >
+        <rect x="3" y="4" width="18" height="14" rx="2" />
+        <path d="M3 9h18" />
+      </svg>
+    ),
+    items: ['React', 'TypeScript', 'Next.js', 'Tailwind'],
   },
   {
-    title: 'Automatizaciones y bots',
-    description:
-      'Flujos automáticos, integraciones y bots para reducir tareas repetitivas en ventas, soporte y operación.',
-    icon: Bot,
+    group: 'Backend',
+    icon: (
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      >
+        <rect x="3" y="4" width="18" height="6" rx="1.5" />
+        <rect x="3" y="14" width="18" height="6" rx="1.5" />
+        <circle cx="7" cy="7" r="0.6" fill="currentColor" />
+        <circle cx="7" cy="17" r="0.6" fill="currentColor" />
+      </svg>
+    ),
+    items: ['FastAPI', 'Python', 'PostgreSQL', 'Supabase'],
   },
   {
-    title: 'E-commerce',
-    description:
-      'Configuración, diseño y optimización de tiendas online, páginas de venta y catálogos para convertir mejor.',
-    icon: ShoppingCart,
-  },
-  {
-    title: 'Sistemas internos',
-    description:
-      'Herramientas a medida para gestionar datos, equipos, procesos y reportes sin depender de planillas frágiles.',
-    icon: Settings2,
+    group: 'Cloud',
+    icon: (
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      >
+        <path d="M7 18a4.5 4.5 0 0 1-.4-9A5.5 5.5 0 0 1 17 8.5a4 4 0 0 1-.6 9.5H7Z" />
+      </svg>
+    ),
+    items: ['Docker', 'Railway', 'Vercel'],
   },
 ]
 
-type ProjectPreviewProps = {
-  name: string
-  accent: string
-  image?: string
+const experience = [
+  {
+    role: 'Full Stack Developer — Fundador',
+    company: 'Gestify',
+    period: '2024 - Presente',
+    detail:
+      'ERP SaaS para pymes argentinas. Diseño y desarrollo de la plataforma completa: dashboard, facturación, stock y clientes, con clientes activos pagando.',
+  },
+  {
+    role: 'Full Stack Developer',
+    company: 'Freelance',
+    period: '2022 - 2024',
+    detail:
+      'Plataformas a medida para industrias de remolques y mobiliario: e-commerce B2B, paneles de administración y sitios institucionales.',
+  },
+  {
+    role: 'Estudiante',
+    company: 'IES Siglo 21',
+    period: '2021 - Presente',
+    detail: 'Técnico en Administración de Empresas.',
+  },
+]
+
+function GithubIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2C6.48 2 2 6.58 2 12.19c0 4.49 2.87 8.3 6.84 9.64.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.72-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.49-1.11-1.49-.91-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.29 9.29 0 0 1 5.01 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.19C22 6.58 17.52 2 12 2Z" />
+    </svg>
+  )
 }
 
-function ProjectPreview({ name, accent, image }: ProjectPreviewProps) {
-  if (image) {
-    return (
-      <div
-        className="relative aspect-video w-full overflow-hidden rounded-xl bg-zinc-950"
-        aria-label={`Vista previa del proyecto ${name}`}
-      >
-        <Image
-          alt={`Captura de la página ${name}`}
-          className="h-full w-full object-cover"
-          fill
-          sizes="(min-width: 640px) 50vw, 100vw"
-          src={image}
-        />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-white/10" />
-      </div>
-    )
-  }
-
+function LinkedinIcon() {
   return (
-    <div
-      className={`relative aspect-video w-full overflow-hidden rounded-xl bg-gradient-to-br ${accent}`}
-      aria-label={`Vista previa del proyecto ${name}`}
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M6.94 8.5H3.56V20h3.38V8.5ZM5.25 3.5a1.96 1.96 0 1 0 0 3.92 1.96 1.96 0 0 0 0-3.92ZM20.44 20h-3.37v-5.9c0-1.4-.03-3.2-1.95-3.2-1.96 0-2.26 1.53-2.26 3.1V20H9.5V8.5h3.23v1.57h.05c.45-.85 1.55-1.75 3.2-1.75 3.43 0 4.06 2.26 4.06 5.19V20Z" />
+    </svg>
+  )
+}
+
+function MailIcon() {
+  return (
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      style={{ marginRight: 6, flexShrink: 0 }}
     >
-      <div className="absolute inset-x-5 top-5 h-2 rounded-full bg-white/70 dark:bg-zinc-800/80" />
-      <div className="absolute top-10 right-5 left-5 grid grid-cols-3 gap-2">
-        <div className="h-12 rounded-md bg-white/70 dark:bg-zinc-800/80" />
-        <div className="h-12 rounded-md bg-white/50 dark:bg-zinc-800/60" />
-        <div className="h-12 rounded-md bg-white/60 dark:bg-zinc-800/70" />
-      </div>
-      <div className="absolute right-5 bottom-5 left-5 space-y-2">
-        <div className="h-2 w-3/4 rounded-full bg-zinc-900/15 dark:bg-white/20" />
-        <div className="h-2 w-1/2 rounded-full bg-zinc-900/10 dark:bg-white/15" />
-      </div>
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m3 7 9 6 9-6" />
+    </svg>
+  )
+}
+
+function PinIcon() {
+  return (
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      style={{ marginRight: 6, flexShrink: 0 }}
+    >
+      <path d="M12 21s7-6.1 7-11.3A7 7 0 0 0 5 9.7C5 14.9 12 21 12 21Z" />
+      <circle cx="12" cy="9.5" r="2.4" />
+    </svg>
+  )
+}
+
+function SocialLink({
+  href,
+  label,
+  children,
+}: {
+  href: string
+  label: string
+  children: ReactNode
+}) {
+  return (
+    <a
+      className="social-icon"
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={label}
+    >
+      {children}
+    </a>
+  )
+}
+
+export default function Portfolio() {
+  return (
+    <div style={styles.page}>
+      <style>{`
+        * { box-sizing: border-box; }
+        body { margin: 0; }
+        .pill {
+          background: #F4F4F4;
+          transition: background .15s ease;
+        }
+        .pill:hover { background: #EAEAEA; }
+        .social-icon { color: #111; opacity: .85; transition: opacity .15s ease; }
+        .social-icon:hover { opacity: 1; }
+        .grid { display: grid; grid-template-columns: 300px 1fr; gap: 0; }
+        .left-col { border-right: 1px solid #E9E9E9; padding-right: 56px; }
+        .right-col { padding-left: 56px; }
+        @media (max-width: 820px) {
+          .grid { display: flex; flex-direction: column; }
+          .left-col {
+            border-right: none;
+            border-bottom: 1px solid #E9E9E9;
+            padding: 0 0 40px 0;
+            margin-bottom: 40px;
+          }
+          .right-col { padding-left: 0; }
+          .left-inner { align-items: center !important; text-align: center; }
+          .contact-row { align-items: center !important; }
+        }
+      `}</style>
+
+      <main style={styles.container}>
+        <div className="grid">
+          <div className="left-col">
+            <div className="left-inner" style={styles.leftInner}>
+              <div style={styles.avatarWrap}>
+                <Image
+                  src="/julian-brochero-headshot.png"
+                  alt="Foto de perfil de Julián Brochero"
+                  width={128}
+                  height={128}
+                  style={styles.avatar}
+                  priority
+                />
+              </div>
+
+              <h1 style={styles.name}>Julian Brochero</h1>
+              <p style={styles.role}>Full Stack Developer</p>
+              <p style={styles.bio}>
+                Freelance developer y creador de Gestify, un ERP para pymes
+                argentinas.
+              </p>
+
+              <div className="contact-row" style={styles.contactCol}>
+                <span style={styles.contactItem}>
+                  <MailIcon />
+                  brocherojulian72@gmail.com
+                </span>
+                <span style={styles.contactItem}>
+                  <PinIcon />
+                  Villa María, Córdoba, AR
+                </span>
+              </div>
+
+              <div style={styles.socialRow}>
+                <SocialLink
+                  href="https://github.com/julianbrochero"
+                  label="GitHub"
+                >
+                  <GithubIcon />
+                </SocialLink>
+                <SocialLink
+                  href="https://linkedin.com/in/julian-brochero"
+                  label="LinkedIn"
+                >
+                  <LinkedinIcon />
+                </SocialLink>
+              </div>
+            </div>
+          </div>
+
+          <div className="right-col">
+            <section>
+              <h2 style={styles.sectionTitle}>Core Skills</h2>
+              <div style={styles.sectionHr} />
+              <div style={styles.skillGroupsWrap}>
+                {skillGroups.map((group) => (
+                  <div key={group.group} style={styles.skillGroup}>
+                    <div style={styles.skillGroupLabel}>
+                      {group.icon}
+                      {group.group}
+                    </div>
+                    <div style={styles.pillRow}>
+                      {group.items.map((item) => (
+                        <span key={item} className="pill" style={styles.pill}>
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section style={{ marginTop: 48 }}>
+              <h2 style={styles.sectionTitle}>Experience</h2>
+              <div style={styles.sectionHr} />
+              <div style={{ position: 'relative' }}>
+                {experience.map((entry, index) => (
+                  <div key={entry.role} style={styles.expItem}>
+                    <span style={styles.expDot} />
+                    {index !== experience.length - 1 ? (
+                      <span style={styles.expLine} />
+                    ) : null}
+                    <div style={styles.expHeader}>
+                      <h3 style={styles.expRole}>{entry.role}</h3>
+                      <span style={styles.expPeriod}>{entry.period}</span>
+                    </div>
+                    <p style={styles.expCompany}>{entry.company}</p>
+                    <p style={styles.expDetail}>{entry.detail}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
     </div>
   )
 }
 
-function MagneticSocialLink({
-  children,
-  link,
-}: {
-  children: React.ReactNode
-  link: string
-}) {
-  return (
-    <Magnetic springOptions={{ bounce: 0 }} intensity={0.3}>
-      <a
-        href={link}
-        className="group relative inline-flex shrink-0 items-center gap-[1px] rounded-full bg-zinc-100 px-2.5 py-1 text-sm text-black transition-colors duration-200 hover:bg-zinc-950 hover:text-zinc-50 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
-      >
-        {children}
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 15 15"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-3 w-3"
-        >
-          <path
-            d="M3.64645 11.3536C3.45118 11.1583 3.45118 10.8417 3.64645 10.6465L10.2929 4L6 4C5.72386 4 5.5 3.77614 5.5 3.5C5.5 3.22386 5.72386 3 6 3L11.5 3C11.6326 3 11.7598 3.05268 11.8536 3.14645C11.9473 3.24022 12 3.36739 12 3.5L12 9.00001C12 9.27615 11.7761 9.50001 11.5 9.50001C11.2239 9.50001 11 9.27615 11 9.00001V4.70711L4.35355 11.3536C4.15829 11.5488 3.84171 11.5488 3.64645 11.3536Z"
-            fill="currentColor"
-            fillRule="evenodd"
-            clipRule="evenodd"
-          ></path>
-        </svg>
-      </a>
-    </Magnetic>
-  )
-}
-
-export default function Personal() {
-  const [introGone, setIntroGone] = useState(false)
-
-  return (
-    <>
-      {!introGone && <IntroScreen onComplete={() => setIntroGone(true)} />}
-      <motion.main
-        className="space-y-24"
-        variants={VARIANTS_CONTAINER}
-        initial="hidden"
-        animate="visible"
-      >
-        <div className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden">
-          <HeroSection />
-        </div>
-
-        <motion.section
-          variants={VARIANTS_SECTION}
-          transition={TRANSITION_SECTION}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false, amount: 0.45 }}
-        >
-          <div className="flex-1">
-            <p className="text-zinc-600 dark:text-zinc-400">
-              Creamos productos digitales que resuelven problemas reales, desde
-              plataformas SaaS hasta automatizaciones a medida. Estamos en
-              Argentina y trabajamos con empresas que quieren software que
-              realmente funcione.
-            </p>
-          </div>
-        </motion.section>
-
-        <motion.section
-          id="servicios"
-          variants={VARIANTS_SECTION}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false, amount: 0.45 }}
-        >
-          <div className="mb-5 flex items-end justify-between gap-6">
-            <div>
-              <p className="mb-2 text-xs font-medium tracking-[0.24em] text-zinc-500 uppercase dark:text-zinc-500">
-                Qué hacemos
-              </p>
-              <h3 className="text-lg font-medium">Servicios</h3>
-            </div>
-            <p className="hidden max-w-xs text-right text-sm text-zinc-500 md:block dark:text-zinc-500">
-              Soluciones concretas para vender, operar y automatizar mejor.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {SERVICES.map((service, index) => {
-              const Icon = service.icon
-
-              return (
-                <motion.div
-                  key={service.title}
-                  custom={index}
-                  variants={VARIANTS_SECTION_ITEM}
-                  className="group relative overflow-hidden rounded-2xl bg-zinc-100/70 p-[1px] transition-colors duration-200 hover:bg-zinc-300/80 dark:bg-zinc-800/60 dark:hover:bg-zinc-700/80"
-                >
-                  <div className="relative h-full rounded-[15px] bg-white/85 p-5 dark:bg-zinc-950/90">
-                    <div className="mb-8 flex h-9 w-9 items-center justify-center rounded-full bg-zinc-950 text-zinc-50 dark:bg-zinc-100 dark:text-zinc-950">
-                      <Icon className="h-4 w-4" />
-                    </div>
-                    <h4 className="text-base font-medium text-zinc-950 dark:text-zinc-50">
-                      {service.title}
-                    </h4>
-                    <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-                      {service.description}
-                    </p>
-                  </div>
-                </motion.div>
-              )
-            })}
-          </div>
-        </motion.section>
-
-        <motion.section
-          id="proyectos"
-          variants={VARIANTS_SECTION}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false, amount: 0.45 }}
-        >
-          <h3 className="mb-5 text-lg font-medium">Proyectos seleccionados</h3>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {PROJECTS.map((project, index) => (
-              <motion.div
-                key={project.name}
-                custom={index}
-                variants={VARIANTS_SECTION_ITEM}
-                className="space-y-2"
-              >
-                <div className="relative rounded-2xl bg-zinc-50/40 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50">
-                  <ProjectPreview
-                    name={project.name}
-                    accent={project.accent}
-                    image={project.image}
-                  />
-                </div>
-                <div className="px-1">
-                  {project.link ? (
-                    <a
-                      className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50"
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {project.name}
-                      <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-50"></span>
-                    </a>
-                  ) : (
-                    <h4 className="font-base font-[450] text-zinc-900 dark:text-zinc-50">
-                      {project.name}
-                    </h4>
-                  )}
-                  <p className="text-base text-zinc-600 dark:text-zinc-400">
-                    {project.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.section>
-
-        <motion.section
-          id="experiencia"
-          variants={VARIANTS_SECTION}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false, amount: 0.45 }}
-        >
-          <h3 className="mb-5 text-lg font-medium">Experiencia</h3>
-          <div className="flex flex-col space-y-2">
-            {WORK_EXPERIENCE.map((job, index) => (
-              <motion.a
-                className="relative overflow-hidden rounded-2xl bg-zinc-300/30 p-[1px] dark:bg-zinc-600/30"
-                custom={index}
-                href={job.link}
-                key={job.id}
-                rel="noopener noreferrer"
-                target="_blank"
-                variants={VARIANTS_SECTION_ITEM}
-              >
-                <Spotlight
-                  className="from-zinc-900 via-zinc-800 to-zinc-700 blur-2xl dark:from-zinc-100 dark:via-zinc-200 dark:to-zinc-50"
-                  size={64}
-                />
-                <div className="relative h-full w-full rounded-[15px] bg-white p-4 dark:bg-zinc-950">
-                  <div className="relative flex w-full flex-row justify-between">
-                    <div>
-                      <h4 className="font-normal dark:text-zinc-100">
-                        {job.title}
-                      </h4>
-                      <p className="text-zinc-500 dark:text-zinc-400">
-                        {job.company}
-                      </p>
-                    </div>
-                    <p className="text-zinc-600 dark:text-zinc-400">
-                      {job.start} - {job.end}
-                    </p>
-                  </div>
-                </div>
-              </motion.a>
-            ))}
-          </div>
-        </motion.section>
-
-        <motion.section
-          id="contacto"
-          variants={VARIANTS_SECTION}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false, amount: 0.45 }}
-        >
-          <h3 className="mb-5 text-lg font-medium">Contacto</h3>
-          <p className="mb-5 text-zinc-600 dark:text-zinc-400">
-            ¿Tenés un proyecto en mente? Hablemos en{' '}
-            <a
-              className="underline dark:text-zinc-300"
-              href={`mailto:${EMAIL}`}
-            >
-              {EMAIL}
-            </a>
-          </p>
-          <div className="flex items-center justify-start space-x-3">
-            {SOCIAL_LINKS.map((link) => (
-              <MagneticSocialLink key={link.label} link={link.link}>
-                {link.label}
-              </MagneticSocialLink>
-            ))}
-          </div>
-        </motion.section>
-      </motion.main>
-    </>
-  )
+const styles: Record<string, CSSProperties> = {
+  page: {
+    minHeight: '100vh',
+    background: '#FFFFFF',
+    fontFamily: 'var(--font-inter), -apple-system, sans-serif',
+    color: '#111111',
+    padding: '72px 24px',
+  },
+  container: { maxWidth: '1000px', margin: '0 auto' },
+  leftInner: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
+  avatarWrap: {
+    width: '128px',
+    height: '128px',
+    borderRadius: '50%',
+    overflow: 'hidden',
+    marginBottom: '28px',
+    background: '#E9E9E9',
+  },
+  avatar: {
+    width: '128px',
+    height: '128px',
+    borderRadius: '50%',
+    objectFit: 'cover',
+  },
+  name: {
+    fontSize: '30px',
+    fontWeight: 700,
+    margin: 0,
+    letterSpacing: '-0.01em',
+  },
+  role: {
+    fontSize: '16px',
+    color: '#111',
+    margin: '8px 0 16px',
+    fontWeight: 500,
+  },
+  bio: {
+    fontSize: '14.5px',
+    lineHeight: 1.6,
+    color: '#6B6B6B',
+    margin: '0 0 28px',
+    maxWidth: '280px',
+  },
+  contactCol: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+    marginBottom: '24px',
+  },
+  contactItem: {
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '13.5px',
+    color: '#6B6B6B',
+  },
+  socialRow: { display: 'flex', gap: '16px' },
+  sectionTitle: { fontSize: '22px', fontWeight: 700, margin: 0 },
+  sectionHr: { height: '1px', background: '#E9E9E9', margin: '18px 0 28px' },
+  skillGroupsWrap: { display: 'flex', flexDirection: 'column', gap: '28px' },
+  skillGroup: {},
+  skillGroupLabel: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    fontSize: '14.5px',
+    fontWeight: 500,
+    color: '#111',
+    marginBottom: '14px',
+  },
+  pillRow: { display: 'flex', flexWrap: 'wrap', gap: '10px' },
+  pill: {
+    fontSize: '13.5px',
+    fontWeight: 500,
+    padding: '8px 16px',
+    borderRadius: '999px',
+    color: '#111',
+  },
+  expItem: { position: 'relative', paddingLeft: '24px', paddingBottom: '32px' },
+  expDot: {
+    position: 'absolute',
+    left: 0,
+    top: '7px',
+    width: '8px',
+    height: '8px',
+    borderRadius: '50%',
+    background: '#D9D9D9',
+  },
+  expLine: {
+    position: 'absolute',
+    left: '3.5px',
+    top: '17px',
+    bottom: 0,
+    width: '1px',
+    background: '#E9E9E9',
+  },
+  expHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    gap: '8px',
+    alignItems: 'baseline',
+  },
+  expRole: { fontSize: '17px', fontWeight: 600, margin: 0 },
+  expPeriod: { fontSize: '13px', color: '#9A9A9A', whiteSpace: 'nowrap' },
+  expCompany: {
+    fontSize: '14px',
+    color: '#111',
+    margin: '4px 0 8px',
+    fontWeight: 500,
+  },
+  expDetail: {
+    fontSize: '14px',
+    lineHeight: 1.6,
+    color: '#6B6B6B',
+    margin: 0,
+    maxWidth: '560px',
+  },
 }

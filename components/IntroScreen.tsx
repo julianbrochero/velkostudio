@@ -2,7 +2,23 @@
 
 import { useEffect, useRef } from 'react'
 
-const LETTERS = ['V', 'E', 'L', 'k', 'O', '®']
+const LETTERS = [
+  'J',
+  'U',
+  'L',
+  'I',
+  'A',
+  'N',
+  ' ',
+  'B',
+  'R',
+  'O',
+  'C',
+  'H',
+  'E',
+  'R',
+  'O',
+]
 
 type IntroScreenProps = {
   onComplete?: () => void
@@ -52,28 +68,23 @@ export default function IntroScreen({ onComplete }: IntroScreenProps) {
       className="fixed inset-0 z-50 flex items-center justify-center bg-black"
       style={{ transform: 'translateY(0)' }}
     >
-      <div className="flex overflow-visible">
+      <div className="flex flex-wrap justify-center overflow-visible px-6">
         {LETTERS.map((letter, i) => (
           <span
-            key={letter}
+            key={`${letter}-${i}`}
             ref={(el) => {
               lettersRef.current[i] = el
             }}
             className="text-white"
             style={{
-              alignSelf: letter === '®' ? 'flex-start' : 'auto',
               color: '#fff',
               display: 'inline-block',
               fontFamily: 'var(--font-display), Inter, sans-serif',
-              fontSize:
-                letter === '®'
-                  ? 'clamp(18px, 2.8vw, 34px)'
-                  : 'clamp(58px, 10vw, 112px)',
-              fontWeight: 700,
-              letterSpacing: '-0.06em',
+              fontSize: 'clamp(32px, 6vw, 72px)',
+              fontWeight: 600,
+              letterSpacing: '-0.05em',
               lineHeight: 1,
-              marginLeft: letter === '®' ? '0.08em' : 0,
-              marginTop: letter === '®' ? '0.06em' : 0,
+              whiteSpace: 'pre',
               transform: 'translateY(115vh)',
             }}
           >

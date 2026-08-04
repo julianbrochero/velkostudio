@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from 'next'
 import { Geist_Mono, Inter, Inter_Tight } from 'next/font/google'
 import './globals.css'
-import { Header } from './header'
-import { Footer } from './footer'
 import { ThemeProvider } from 'next-themes'
+import { WEBSITE_URL } from '@/lib/constants'
+import { LayoutFrame } from '@/components/layout-frame'
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -12,21 +12,22 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://velko.studio/'),
+  metadataBase: new URL(WEBSITE_URL),
   alternates: {
     canonical: '/',
   },
   title: {
-    default: 'VELkO® — Experiencias web, automatizaciones y software',
-    template: '%s | VELkO®',
+    default: 'Julián Brochero | Full Stack Developer',
+    template: '%s | Julián Brochero',
   },
   description:
-    'Creamos productos digitales que resuelven problemas reales. Plataformas SaaS, automatizaciones a medida y soluciones de e-commerce desde Argentina.',
+    'Portfolio de Julián Brochero, Full Stack Developer. Desarrollo aplicaciones web modernas, productos SaaS y sistemas para automatizar empresas.',
   openGraph: {
-    title: 'VELkO®',
-    description: 'Experiencias web · Automatizaciones · Software',
-    url: 'https://velko.studio',
-    siteName: 'VELkO®',
+    title: 'Julián Brochero | Full Stack Developer',
+    description:
+      'Aplicaciones web modernas, productos SaaS y sistemas a medida con foco en producto, negocio y ejecución.',
+    url: WEBSITE_URL,
+    siteName: 'Julián Brochero',
   },
   twitter: {
     card: 'summary_large_image',
@@ -66,13 +67,7 @@ export default function RootLayout({
           storageKey="theme"
           defaultTheme="system"
         >
-          <div className="flex min-h-screen w-full flex-col font-[family-name:var(--font-inter)]">
-            <div className="relative mx-auto w-full max-w-screen-sm flex-1 px-4 pt-20">
-              <Header />
-              {children}
-              <Footer />
-            </div>
-          </div>
+          <LayoutFrame>{children}</LayoutFrame>
         </ThemeProvider>
       </body>
     </html>
